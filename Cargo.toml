@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: Copyright 2024 Ian McIntyre
+
+[package]
+name = "fusible"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+license.workspace = true
+
+[dependencies]
+libthreadx-sys.workspace = true
+defmt = { workspace = true, optional = true }
+
+[dev-dependencies]
+trybuild = "1.0"
+
+[[test]]
+name = "drop_in_init"
+harness = false
+
+[workspace.package]
+license = "MPL-2.0"
+
+[workspace]
+members = [
+    "crates/allocator",
+    "crates/app-benchmark",
+    "crates/critical-section",
+    "crates/hybrid-app",
+    "crates/qemu",
+]
+
+[workspace.dependencies]
+fusible = { path = "." }
+fusible-allocator = { path = "crates/allocator" }
+fusible-app-benchmark = { path = "crates/app-benchmark" }
+fusible-critical-section = { path = "crates/critical-section" }
+fusible-hybrid-app = { path = "crates/hybrid-app" }
+fusible-qemu = { path = "crates/qemu" }
+libthreadx-sys = { git = "https://github.com/mciantyre/libthreadx-sys" }
+
+cc = { version = "1.1" }
+
+cortex-m = { version = "0.7" }
+cortex-m-rt = { version = "0.7" }
+cortex-m-semihosting = { version = "0.5" }
+
+critical-section = { version = "1.1.2" }
+
+defmt = "0.3.8"
+
+embedded-hal = "1.0.0"
+embedded-io = "0.6.1"
+
+[profile.release]
+lto = "thin"
+opt-level = "s"
+codegen-units = 1
+debug = 2
+overflow-checks = true

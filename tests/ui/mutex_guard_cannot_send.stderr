@@ -1,0 +1,47 @@
+error[E0277]: `*mut ()` cannot be sent between threads safely
+  --> tests/ui/mutex_guard_cannot_send.rs:12:24
+   |
+12 |       std::thread::spawn(move || {
+   |       ------------------ ^------
+   |       |                  |
+   |  _____|__________________within this `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}`
+   | |     |
+   | |     required by a bound introduced by this call
+13 | |         std::mem::drop(guard);
+14 | |     });
+   | |_____^ `*mut ()` cannot be sent between threads safely
+   |
+   = help: within `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}`, the trait `Send` is not implemented for `*mut ()`, which is required by `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}: Send`
+note: required because it appears within the type `PhantomData<*mut ()>`
+  --> $RUST/core/src/marker.rs
+   |
+   | pub struct PhantomData<T: ?Sized>;
+   |            ^^^^^^^^^^^
+note: required because it appears within the type `fusible::marker::NotSendOrSync`
+  --> src/lib.rs
+   |
+   |     pub(crate) struct NotSendOrSync(PhantomData<*mut ()>);
+   |                       ^^^^^^^^^^^^^
+note: required because it appears within the type `fusible::marker::NotSend`
+  --> src/lib.rs
+   |
+   |     pub(crate) struct NotSend(NotSendOrSync);
+   |                       ^^^^^^^
+note: required because it appears within the type `fusible::mutex::MutexGuard<'_, u32>`
+  --> src/mutex.rs
+   |
+   | pub struct MutexGuard<'a, T> {
+   |            ^^^^^^^^^^
+note: required because it's used within this closure
+  --> tests/ui/mutex_guard_cannot_send.rs:12:24
+   |
+12 |     std::thread::spawn(move || {
+   |                        ^^^^^^^
+note: required by a bound in `spawn`
+  --> $RUST/std/src/thread/mod.rs
+   |
+   | pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+   |        ----- required by a bound in this function
+...
+   |     F: Send + 'static,
+   |        ^^^^ required by this bound in `spawn`

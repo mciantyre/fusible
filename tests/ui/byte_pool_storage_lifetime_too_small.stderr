@@ -1,0 +1,48 @@
+error[E0597]: `storage` does not live long enough
+  --> tests/ui/byte_pool_storage_lifetime_too_small.rs:12:37
+   |
+10 |     let pool = core::pin::pin!(BytePool::context());
+   |                ------------------------------------ a temporary with access to the borrow is created here ...
+11 |     let mut storage = [0u8; 1024];
+   |         ----------- binding `storage` declared here
+12 |     BytePool::create(pool.as_ref(), &mut storage, &{
+   |                                     ^^^^^^^^^^^^ borrowed value does not live long enough
+...
+18 | }
+   | -
+   | |
+   | `storage` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+
+error[E0597]: `lower` does not live long enough
+  --> tests/ui/byte_pool_storage_lifetime_too_small.rs:31:37
+   |
+27 |     let pool = core::pin::pin!(BytePool::context());
+   |                ------------------------------------ a temporary with access to the borrow is created here ...
+28 |     let mut lower = [0u8; 512];
+   |         --------- binding `lower` declared here
+...
+31 |     BytePool::create(pool.as_ref(), &mut lower, &Default::default()).unwrap(); // ERROR: lower lifetime less than pool.
+   |                                     ^^^^^^^^^^ borrowed value does not live long enough
+32 | }
+   | -
+   | |
+   | `lower` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+
+error[E0597]: `lower` does not live long enough
+  --> tests/ui/byte_pool_storage_lifetime_too_small.rs:44:37
+   |
+41 |     let pool = core::pin::pin!(BytePool::context());
+   |                ------------------------------------ a temporary with access to the borrow is created here ...
+42 |     let mut lower = [0u8; 512];
+   |         --------- binding `lower` declared here
+43 |
+44 |     BytePool::create(pool.as_ref(), &mut lower, &Default::default()).unwrap(); // ERROR: lower lifetime less than pool.
+   |                                     ^^^^^^^^^^ borrowed value does not live long enough
+45 |     BytePool::create(pool.as_ref(), &mut upper, &Default::default()).unwrap(); // OK: upper lifetime greater than pool.
+46 | }
+   | -
+   | |
+   | `lower` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`

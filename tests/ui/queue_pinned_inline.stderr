@@ -1,0 +1,18 @@
+error[E0716]: temporary value dropped while borrowed
+  --> tests/ui/queue_pinned_inline.rs:11:9
+   |
+11 |         core::pin::pin!(Queue::context()).into_ref(),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value which is freed while still in use
+...
+15 |     .unwrap();
+   |              - temporary value is freed at the end of this statement
+16 |     queue.try_receive().unwrap();
+   |     ----- borrow later used here
+   |
+   = note: this error originates in the macro `core::pin::pin` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider using a `let` binding to create a longer lived value
+   |
+10 ~     let binding = core::pin::pin!(Queue::context());
+11 ~     let queue = Queue::create(
+12 ~         binding.into_ref(),
+   |

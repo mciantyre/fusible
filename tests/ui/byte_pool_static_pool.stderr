@@ -1,0 +1,13 @@
+error[E0597]: `storage` does not live long enough
+  --> tests/ui/byte_pool_static_pool.rs:12:28
+   |
+10 |     let mut storage = [0u8; 1024];
+   |         ----------- binding `storage` declared here
+11 |     let pool = core::pin::Pin::static_ref(&BYTE_POOL);
+12 |     BytePool::create(pool, &mut storage, &Default::default()).unwrap();
+   |     -----------------------^^^^^^^^^^^^----------------------
+   |     |                      |
+   |     |                      borrowed value does not live long enough
+   |     argument requires that `storage` is borrowed for `'static`
+13 | }
+   | - `storage` dropped here while still borrowed

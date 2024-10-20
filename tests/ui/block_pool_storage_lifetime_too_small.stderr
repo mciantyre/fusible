@@ -1,0 +1,47 @@
+error[E0597]: `storage` does not live long enough
+  --> tests/ui/block_pool_storage_lifetime_too_small.rs:14:38
+   |
+12 |     let pool = core::pin::pin!(BlockPool::context());
+   |                ------------------------------------- a temporary with access to the borrow is created here ...
+13 |     let mut storage = [const { MyBlock::new() }; 5];
+   |         ----------- binding `storage` declared here
+14 |     BlockPool::create(pool.as_ref(), &mut storage, &Default::default()).unwrap();
+   |                                      ^^^^^^^^^^^^ borrowed value does not live long enough
+15 | }
+   | -
+   | |
+   | `storage` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BlockPoolContext`
+
+error[E0597]: `lower` does not live long enough
+  --> tests/ui/block_pool_storage_lifetime_too_small.rs:28:38
+   |
+24 |     let pool = core::pin::pin!(BlockPool::context());
+   |                ------------------------------------- a temporary with access to the borrow is created here ...
+25 |     let mut lower = [const { MyBlock::new() }; 5];
+   |         --------- binding `lower` declared here
+...
+28 |     BlockPool::create(pool.as_ref(), &mut lower, &Default::default()).unwrap(); // ERROR: lower lifetime less than pool.
+   |                                      ^^^^^^^^^^ borrowed value does not live long enough
+29 | }
+   | -
+   | |
+   | `lower` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BlockPoolContext`
+
+error[E0597]: `lower` does not live long enough
+  --> tests/ui/block_pool_storage_lifetime_too_small.rs:41:38
+   |
+38 |     let pool = core::pin::pin!(BlockPool::context());
+   |                ------------------------------------- a temporary with access to the borrow is created here ...
+39 |     let mut lower = [const { MyBlock::new() }; 5];
+   |         --------- binding `lower` declared here
+40 |
+41 |     BlockPool::create(pool.as_ref(), &mut lower, &Default::default()).unwrap(); // ERROR: lower lifetime less than pool.
+   |                                      ^^^^^^^^^^ borrowed value does not live long enough
+42 |     BlockPool::create(pool.as_ref(), &mut upper, &Default::default()).unwrap(); // OK: upper lifetime greater than pool.
+43 | }
+   | -
+   | |
+   | `lower` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BlockPoolContext`

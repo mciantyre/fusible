@@ -1,0 +1,17 @@
+error[E0597]: `runnable` does not live long enough
+  --> tests/ui/timer_runnable_lifetime.rs:14:9
+   |
+8  |       let runnable = || println!();
+   |           -------- binding `runnable` declared here
+9  |       let timer = pin!(Timer::context());
+10 | /     Timer::create(
+11 | |         timer.into_ref(),
+12 | |         TimerSchedule::one_shot(1.try_into().unwrap()),
+13 | |         &Default::default(),
+14 | |         &runnable,
+   | |         ^^^^^^^^^ borrowed value does not live long enough
+15 | |     )
+   | |_____- argument requires that `runnable` is borrowed for `'static`
+16 |       .unwrap();
+17 |   }
+   |   - `runnable` dropped here while still borrowed

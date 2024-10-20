@@ -1,0 +1,17 @@
+error[E0597]: `name` does not live long enough
+  --> tests/ui/event_flags_option_name.rs:13:22
+   |
+9  |     let flags = pin!(EventFlags::context());
+   |                 --------------------------- a temporary with access to the borrow is created here ...
+10 |
+11 |     let name = CString::new("name").unwrap();
+   |         ---- binding `name` declared here
+12 |     let mut opts = EventFlagsOptions::default();
+13 |     opts.name = Some(&name);
+   |                      ^^^^^ borrowed value does not live long enough
+...
+16 | }
+   | -
+   | |
+   | `name` dropped here while still borrowed
+   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `EventFlagsContext`

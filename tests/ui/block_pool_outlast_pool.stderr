@@ -1,0 +1,13 @@
+error[E0716]: temporary value dropped while borrowed
+  --> tests/ui/block_pool_outlast_pool.rs:12:20
+   |
+11 |     let floats: Block<Vec<f64>> = {
+   |         ------ borrow later stored here
+12 |         let pool = core::pin::pin!(BlockPool::context());
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value which is freed while still in use
+...
+15 |     };
+   |     - temporary value is freed at the end of this statement
+   |
+   = note: consider using a `let` binding to create a longer lived value
+   = note: this error originates in the macro `core::pin::pin` (in Nightly builds, run with -Z macro-backtrace for more info)

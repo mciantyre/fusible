@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: Copyright 2024 Ian McIntyre
+
+[package]
+name = "fusible-app-benchmark"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license.workspace = true
+
+[dependencies]
+fusible.workspace = true
+defmt.workspace = true
+cfg-if = "1.0.0"
+
+[target.'cfg(all(target_arch = "arm", target_os = "none"))'.dependencies]
+cortex-m.workspace = true

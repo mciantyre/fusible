@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: Copyright 2024 Ian McIntyre
+
+[target.thumbv6m-none-eabi]
+runner = "./run.sh cortex-m0"
+rustflags = [
+  "-C", "target-cpu=cortex-m0",
+]
+
+[target.thumbv7m-none-eabi]
+runner = "./run.sh cortex-m3"
+rustflags = [
+  "-C", "target-cpu=cortex-m3",
+]
+
+[target.thumbv7em-none-eabi]
+runner = "./run.sh cortex-m4"
+rustflags = [
+  "-C", "target-cpu=cortex-m4",
+]
+
+[target.thumbv7em-none-eabihf]
+runner = "./run.sh cortex-m4"
+rustflags = [
+  "-C", "target-cpu=cortex-m4",
+]
+
+[target.thumbv8m.base-none-eabi]
+runner = "./run.sh cortex-m33"
+rustflags = [
+  "-C", "target-cpu=cortex-m23",
+]
+
+[target.thumbv8m.main-none-eabi]
+runner = "./run.sh cortex-m33"
+rustflags = [
+  "-C", "target-cpu=cortex-m33",
+]
+
+[target.thumbv8m.main-none-eabihf]
+runner = "./run.sh cortex-m33"
+rustflags = [
+  "-C", "target-cpu=cortex-m33",
+]
+
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+rustflags = [
+  "-C", "link-arg=-Tlink.x",
+  "-C", "link-arg=-Tdefmt.x",
+]
+
+[profile.dev]
+opt-level = 1
+overflow-checks = true
+codegen-units = 1

@@ -1,0 +1,25 @@
+error[E0277]: `Cell<i32>` cannot be shared between threads safely
+  --> tests/ui/thread_interior_mut_share.rs:20:17
+   |
+16 |             .create_thread(
+   |              ------------- required by a bound introduced by this call
+...
+20 |                 || state.set(state.get() + 4),
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Cell<i32>` cannot be shared between threads safely
+   |
+   = help: the trait `Sync` is not implemented for `Cell<i32>`, which is required by `{closure@$DIR/tests/ui/thread_interior_mut_share.rs:20:17: 20:19}: Send`
+   = note: if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicI32` instead
+   = note: required for `&Cell<i32>` to implement `Send`
+note: required because it's used within this closure
+  --> tests/ui/thread_interior_mut_share.rs:20:17
+   |
+20 |                 || state.set(state.get() + 4),
+   |                 ^^
+note: required by a bound in `fusible::thread::<impl AppDefine<'_, 'pke>>::create_thread`
+  --> src/thread.rs
+   |
+   |     pub fn create_thread<'t, 'ctx, F>(
+   |            ------------- required by a bound in this associated function
+...
+   |         F: FnOnce() + Send + 'pke,
+   |                       ^^^^ required by this bound in `fusible::thread::<impl AppDefine<'_, 'pke>>::create_thread`

@@ -1,0 +1,13 @@
+error[E0597]: `storage` does not live long enough
+  --> tests/ui/block_pool_static_pool.rs:12:29
+   |
+10 |     let mut storage = [const { BlockOf::<String>::new() }; 1024];
+   |         ----------- binding `storage` declared here
+11 |     let pool = core::pin::Pin::static_ref(&BLOCK_POOL);
+12 |     BlockPool::create(pool, &mut storage, &Default::default()).unwrap();
+   |                             ^^^^^^^^^^^^
+   |                             |
+   |                             borrowed value does not live long enough
+   |                             cast requires that `storage` is borrowed for `'static`
+13 | }
+   | - `storage` dropped here while still borrowed

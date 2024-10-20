@@ -1,0 +1,23 @@
+error[E0373]: closure may outlive the current function, but it borrows `x`, which is owned by the current function
+  --> tests/ui/thread_local_capture.rs:17:9
+   |
+17 |         || {
+   |         ^^ may outlive borrowed value `x`
+18 |             let _nope = &x;
+   |                          - `x` is borrowed here
+   |
+note: function requires argument type to outlive `'static`
+  --> tests/ui/thread_local_capture.rs:13:5
+   |
+13 | /     Thread::create(
+14 | |         thread.into_ref(),
+15 | |         STACK.take().unwrap(),
+16 | |         &Default::default(),
+...  |
+20 | |         },
+21 | |     )
+   | |_____^
+help: to force the closure to take ownership of `x` (and any other referenced variables), use the `move` keyword
+   |
+17 |         move || {
+   |         ++++

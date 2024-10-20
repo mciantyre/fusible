@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: Copyright 2024 Ian McIntyre
+
+[package]
+name = "fusible-critical-section"
+version = "0.1.0"
+edition = "2021"
+license.workspace = true
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+fusible = { workspace = true }
+critical-section = { workspace = true, features = ["restore-state-none"] }

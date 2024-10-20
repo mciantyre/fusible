@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: Copyright 2024 Ian McIntyre
+
+[package]
+name = "fusible-qemu"
+version = "0.1.0"
+edition = "2021"
+license.workspace = true
+
+[dependencies]
+cortex-m.workspace = true
+cortex-m-rt.workspace = true
+cortex-m-semihosting.workspace = true
+defmt.workspace = true
+fusible.workspace = true
+
+[dev-dependencies]
+cortex-m-rt.workspace = true
+fusible-hybrid-app.workspace = true
+panic-probe = { version = "0.3", features = ["print-defmt"] }
+
+# thumbv6m-none-eabi doesn't support the benchmark app.
+
+[target.thumbv7m-none-eabi.dev-dependencies]
+fusible-app-benchmark = { workspace = true }
+
+[target.thumbv7em-none-eabi.dev-dependencies]
+fusible-app-benchmark = { workspace = true }
+
+[target.thumbv7em-none-eabihi.dev-dependencies]
+fusible-app-benchmark = { workspace = true }
+
+[target.'thumbv8m.base-none-eabi'.dev-dependencies]
+fusible-app-benchmark = { workspace = true }
+
+[target.'thumbv8m.main-none-eabi'.dev-dependencies]
+fusible-app-benchmark = { workspace = true }
+
+[target.'thumbv8m.main-none-eabihi'.dev-dependencies]
+fusible-app-benchmark = { workspace = true }

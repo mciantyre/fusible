@@ -1,0 +1,13 @@
+error[E0716]: temporary value dropped while borrowed
+  --> tests/ui/timer_local_capture.rs:11:16
+   |
+11 |       let msg = &String::new();
+   |                  ^^^^^^^^^^^^^ creates a temporary value which is freed while still in use
+12 |       let timer = pin!(Timer::context());
+13 | /     Timer::create(timer.into_ref(), SCHEDULE, &Default::default(), move || {
+14 | |         let _msg: &str = &msg;
+15 | |     })
+   | |______- argument requires that borrow lasts for `'static`
+16 |       .unwrap();
+17 |   }
+   |   - temporary value is freed at the end of this statement

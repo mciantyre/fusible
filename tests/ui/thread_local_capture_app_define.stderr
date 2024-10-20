@@ -1,0 +1,49 @@
+error[E0373]: closure may outlive the current function, but it borrows `in_app_define`, which is owned by the current function
+  --> tests/ui/thread_local_capture_app_define.rs:21:13
+   |
+15 |     fusible::kernel_enter(|app_define| {
+   |                            ---------- has type `&AppDefine<'_, '1>`
+...
+21 |             || {
+   |             ^^ may outlive borrowed value `in_app_define`
+22 |                 let _ok = &pre_kernel_init;
+23 |                 let _error = &in_app_define;
+   |                               ------------- `in_app_define` is borrowed here
+   |
+note: function requires argument type to outlive `'1`
+  --> tests/ui/thread_local_capture_app_define.rs:17:9
+   |
+17 | /         app_define.create_thread(
+18 | |             thread.into_ref(),
+19 | |             STACK.take().unwrap(),
+20 | |             &Default::default(),
+...  |
+24 | |             },
+25 | |         );
+   | |_________^
+help: to force the closure to take ownership of `in_app_define` (and any other referenced variables), use the `move` keyword
+   |
+21 |             move || {
+   |             ++++
+
+error[E0716]: temporary value dropped while borrowed
+  --> tests/ui/thread_local_capture_app_define.rs:27:33
+   |
+15 |       fusible::kernel_enter(|app_define| {
+   |                              ---------- has type `&AppDefine<'_, '1>`
+...
+27 |           let context_too_small = pin!(Thread::context());
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value which is freed while still in use
+28 | /         app_define
+29 | |             .create_thread(
+30 | |                 context_too_small.into_ref(),
+31 | |                 STACK.take().unwrap(),
+32 | |                 &Default::default(),
+33 | |                 || (),
+34 | |             )
+   | |_____________- argument requires that borrow lasts for `'1`
+35 |               .unwrap();
+36 |       });
+   |       - temporary value is freed at the end of this statement
+   |
+   = note: this error originates in the macro `pin` (in Nightly builds, run with -Z macro-backtrace for more info)
