@@ -175,6 +175,7 @@ version = "0.1.0"
 dependencies = [
  "cc",
  "fusible",
+ "libthreadx-sys",
 ]
 
 [[package]]
@@ -237,7 +238,7 @@ checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
 [[package]]
 name = "libthreadx-sys"
 version = "0.1.0"
-source = "git+https://github.com/mciantyre/libthreadx-sys#7325b726fb5f9a9cda6d601d9a7c74400b79cb6f"
+source = "git+https://github.com/mciantyre/libthreadx-sys#9014e0604cdd082f66774cc75a02b61732dabcc2"
 dependencies = [
  "cc",
  "libc",
