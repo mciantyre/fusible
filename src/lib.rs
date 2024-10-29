@@ -587,6 +587,14 @@ macro_rules! impl_common_context {
         #[inline]
         pub fn try_created(self: core::pin::Pin<&Self>) -> Option<&'_ $Resource> {
             // Safety: We check for creation before assuming creation.
+            //
+            // It might seem there's a race condition here: We observe `is_created()`,
+            // and take the branch. Suddenly, we're deleted through another execution
+            // path! We then call `assume_created()`, even though we're deleted.
+            //
+            // This isn't possible. Once we're created, we're always created until we're
+            // dropped. Dropping requires an exclusive reference, which can't co-exist
+            // with the (pinned) shared reference that we hold.
             unsafe { self.is_created().then(|| self.assume_created()) }
         }
 
