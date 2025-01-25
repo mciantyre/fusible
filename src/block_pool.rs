@@ -460,10 +460,10 @@ impl<T> BlockPool<T> {
             match pool::try_allocate(BlockPoolRef(&self.0), init) {
                 // The above call uses "no wait" as its wait option. The wait option
                 // is valid for all calling contexts.
-                Err(AllocateError::InvalidWait) => core::hint::unreachable_unchecked(),
+                Err(AllocateError::InvalidWait) => fusible_unreachable!(),
                 // The above call uses "no wait" as its wait option. Since it doesn't
                 // wait, it cannot be aborted.
-                Err(AllocateError::WaitAborted) => core::hint::unreachable_unchecked(),
+                Err(AllocateError::WaitAborted) => fusible_unreachable!(),
                 Ok(ptr) => ptr.map(Block),
             }
         }

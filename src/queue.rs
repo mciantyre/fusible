@@ -379,7 +379,7 @@ impl<T> Queue<T> {
         unsafe {
             match self.send_with_wait(elem, WaitOption::wait_forever())? {
                 None => Ok(()),
-                Some(_) => core::hint::unreachable_unchecked(),
+                Some(_) => fusible_unreachable!(),
             }
         }
     }
@@ -406,10 +406,10 @@ impl<T> Queue<T> {
                 // The "no wait" option is valid for all calling contexts.
                 // Since it's valid for all calling contexts, we'll never see
                 // this error.
-                Err((SendError::InvalidWait, _)) => core::hint::unreachable_unchecked(),
+                Err((SendError::InvalidWait, _)) => fusible_unreachable!(),
                 // This call does not wait. Since it does not wait, it cannot
                 // be aborted.
-                Err((SendError::WaitAborted, _)) => core::hint::unreachable_unchecked(),
+                Err((SendError::WaitAborted, _)) => fusible_unreachable!(),
                 Ok(value) => value,
             }
         }
@@ -489,10 +489,10 @@ impl<T> Queue<T> {
             match self.receive_with_wait(WaitOption::no_wait()) {
                 // The "no wait" option is valid for all calling contexts.
                 // Since it's always valid, we'll never see this error.
-                Err(ReceiveError::InvalidWait) => core::hint::unreachable_unchecked(),
+                Err(ReceiveError::InvalidWait) => fusible_unreachable!(),
                 // The "no wait" option never waits. Since it never waits,
                 // it cannot be aborted.
-                Err(ReceiveError::WaitAborted) => core::hint::unreachable_unchecked(),
+                Err(ReceiveError::WaitAborted) => fusible_unreachable!(),
                 Ok(value) => value,
             }
         }

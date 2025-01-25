@@ -947,7 +947,7 @@ pub fn suspend() {
         match identify(Thread::suspend) {
             // A thread trying to suspend itself cannot have already exited.
             // If it already exited, then it couldn't suspend itself.
-            Err(SuspendError::AlreadyExited) => core::hint::unreachable_unchecked(),
+            Err(SuspendError::AlreadyExited) => fusible_unreachable!(),
             Ok(()) => (),
         }
     }
@@ -966,7 +966,7 @@ pub fn terminate() -> ! {
     // returns, since a panic never returns.
     unsafe {
         match identify(Thread::terminate) {
-            Ok(()) => core::hint::unreachable_unchecked(),
+            Ok(()) => fusible_unreachable!(),
             Err(TerminateError::Caller) => panic!(),
         }
     }

@@ -611,6 +611,21 @@ macro_rules! impl_common_context {
     };
 }
 
+/// Claim that the execution path is unreachable.
+///
+/// This always requires an `unsafe` block, since the "panic
+/// if taken" guarantee may not exist for a given build.
+macro_rules! fusible_unreachable {
+    ($($arg:tt)*) => {{
+        #[allow(unreachable_code)]
+        {
+            #[cfg(debug_assertions)]
+            { ::core::unreachable!($($arg)*); }
+            ::core::hint::unreachable_unchecked();
+        }
+    }};
+}
+
 #[cfg(test)]
 extern crate std;
 

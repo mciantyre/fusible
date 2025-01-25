@@ -297,10 +297,10 @@ impl Semaphore {
             match self.get_with_wait(WaitOption::no_wait()) {
                 // The "no wait" option is valid for all calling contexts.
                 // Since it's always valid, we'll never see this error.
-                Err(GetError::InvalidWait) => core::hint::unreachable_unchecked(),
+                Err(GetError::InvalidWait) => fusible_unreachable!(),
                 // The "no wait" option never waits. Since it never waits,
                 // it cannot be aborted.
-                Err(GetError::WaitAborted) => core::hint::unreachable_unchecked(),
+                Err(GetError::WaitAborted) => fusible_unreachable!(),
                 Ok(value) => value,
             }
         }

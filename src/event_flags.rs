@@ -298,10 +298,10 @@ impl EventFlags {
             match self.get_with_wait(requested_flags, get_option, WaitOption::no_wait()) {
                 // The "no wait" option (above) is valid for all calling contexts.
                 // We'll never see this error.
-                Err(GetError::InvalidWait) => core::hint::unreachable_unchecked(),
+                Err(GetError::InvalidWait) => fusible_unreachable!(),
                 // The "no wait" option (above) does not wait. Since it does not
                 // wait, it cannot be aborted.
-                Err(GetError::WaitAborted) => core::hint::unreachable_unchecked(),
+                Err(GetError::WaitAborted) => fusible_unreachable!(),
                 Ok(flags) => flags,
             }
         }

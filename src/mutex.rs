@@ -413,9 +413,9 @@ impl<T> Mutex<T> {
                 Err(LockError::Caller) => Err(LockError::Caller),
                 // If the calling context is correct then the "no wait" option
                 // is always valid.
-                Err(LockError::InvalidWait) => core::hint::unreachable_unchecked(),
+                Err(LockError::InvalidWait) => fusible_unreachable!(),
                 // Since we never wait, there is no wait that can be aborted.
-                Err(LockError::WaitAborted) => core::hint::unreachable_unchecked(),
+                Err(LockError::WaitAborted) => fusible_unreachable!(),
             }
         }
     }
