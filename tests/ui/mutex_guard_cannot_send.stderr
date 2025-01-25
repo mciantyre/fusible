@@ -11,7 +11,7 @@ error[E0277]: `*mut ()` cannot be sent between threads safely
 14 | |     });
    | |_____^ `*mut ()` cannot be sent between threads safely
    |
-   = help: within `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}`, the trait `Send` is not implemented for `*mut ()`, which is required by `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}: Send`
+   = help: within `{closure@$DIR/tests/ui/mutex_guard_cannot_send.rs:12:24: 12:31}`, the trait `Send` is not implemented for `*mut ()`
 note: required because it appears within the type `PhantomData<*mut ()>`
   --> $RUST/core/src/marker.rs
    |

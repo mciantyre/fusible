@@ -8,6 +8,6 @@ error[E0597]: `slots` does not live long enough
    |                                   ^^^^^^^^^^
    |                                   |
    |                                   borrowed value does not live long enough
-   |                                   cast requires that `slots` is borrowed for `'static`
+   |                                   coercion requires that `slots` is borrowed for `'static`
 13 | }
    | - `slots` dropped here while still borrowed

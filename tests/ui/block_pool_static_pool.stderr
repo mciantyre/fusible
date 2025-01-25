@@ -8,6 +8,6 @@ error[E0597]: `storage` does not live long enough
    |                             ^^^^^^^^^^^^
    |                             |
    |                             borrowed value does not live long enough
-   |                             cast requires that `storage` is borrowed for `'static`
+   |                             coercion requires that `storage` is borrowed for `'static`
 13 | }
    | - `storage` dropped here while still borrowed
