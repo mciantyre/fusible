@@ -12,6 +12,7 @@ cortex-m.workspace = true
 cortex-m-rt.workspace = true
 cortex-m-semihosting.workspace = true
 defmt.workspace = true
+defmt-semihosting.workspace = true
 fusible.workspace = true
 
 [dev-dependencies]

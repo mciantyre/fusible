@@ -3,13 +3,13 @@
 
 //! An extension package for running Fusible in QEMU.
 //!
-//! This package vendors a defmt semihosting implementation. You can expect your
+//! It uses defmt semihosting to convey debug messages. You can expect your
 //! QEMU instance to write defmt frames to stdout, and you can parse those using
 //! `defmt-print`, or your custom decoder.
 
 #![no_std]
 
-mod defmt;
+use defmt_semihosting as _;
 
 pub use fusible::*;
 
