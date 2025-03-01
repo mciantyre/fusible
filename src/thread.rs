@@ -72,7 +72,7 @@
 
 pub use stack::{Stack, StaticStack};
 
-use crate::{marker::InvariantLifetime, ControlBlock, FeatureNotEnabledError};
+use crate::{ControlBlock, FeatureNotEnabledError, marker::InvariantLifetime};
 
 use super::AppDefine;
 use crate::tx_sys::TX_THREAD;
@@ -352,11 +352,7 @@ pub enum AutoStart {
 impl From<bool> for AutoStart {
     #[inline]
     fn from(enable: bool) -> Self {
-        if enable {
-            Self::Enable
-        } else {
-            Self::Disable
-        }
+        if enable { Self::Enable } else { Self::Disable }
     }
 }
 
@@ -749,7 +745,7 @@ impl Thread {
             let dispatch = crate::callback_dispatch::make(entry_trampoline::<F>, entry_start);
 
             let result = crate::tx_sys::tx_thread_create(
-                context.0 .0.get(),
+                context.0.0.get(),
                 crate::threadx_string(options.name),
                 Some(dispatch.callback()),
                 dispatch.input(),
@@ -817,7 +813,7 @@ impl Drop for ThreadContext<'_> {
                 "Attempt to drop resource in the initialization context"
             );
 
-            let result = crate::tx_sys::tx_thread_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_thread_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_THREAD_ERROR,
                 "Attempt to drop resource in the initialization context"

@@ -76,7 +76,7 @@
 //!
 //! [`byte_pool`]: crate::byte_pool
 
-use core::ffi::{c_void, CStr};
+use core::ffi::{CStr, c_void};
 use core::mem::MaybeUninit;
 use core::pin::Pin;
 use core::{
@@ -276,7 +276,7 @@ impl<T> Drop for BlockPoolContext<'_, T> {
         // Safety: Resource is created and pinned per GSG-002. Checking lifecycle
         // conditions per GSG-003.
         unsafe {
-            let result = crate::tx_sys::tx_block_pool_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_block_pool_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_POOL_ERROR,
                 "Attempt to drop resource in the initialization context"
@@ -361,7 +361,7 @@ impl<T> BlockPool<T> {
             };
 
             let result = crate::tx_sys::tx_block_pool_create(
-                pool.0 .0.get(),
+                pool.0.0.get(),
                 crate::threadx_string(opts.name),
                 block_size,
                 block_ptr.cast(),

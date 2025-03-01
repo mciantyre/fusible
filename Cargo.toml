@@ -4,7 +4,7 @@
 [package]
 name = "fusible"
 version = "0.1.0"
-edition = "2021"
+edition.workspace = true
 resolver = "2"
 license.workspace = true
 
@@ -21,6 +21,7 @@ harness = false
 
 [workspace.package]
 license = "MPL-2.0"
+edition = "2024"
 
 [workspace]
 members = [

@@ -6,16 +6,16 @@
 use core::{num::NonZero, pin::Pin};
 
 use fusible::{
+    AppDefine,
     block_pool::{Block, BlockPool, BlockPoolContext, StaticBlocks},
     event_flags::{EventFlags, EventFlagsContext, GetOption},
     mutex::Mutex,
     queue::{Queue, QueueContext, StaticQueueSlots},
     semaphore::{Semaphore, SemaphoreContext},
     thread::{StaticStack, Thread, ThreadContext},
-    AppDefine,
 };
 
-extern "C" {
+unsafe extern "C" {
     static sender_thread: ThreadContext<'static>;
     static receiver_thread: ThreadContext<'static>;
     static msg_queue: QueueContext<'static, u32>;
@@ -46,7 +46,7 @@ fn receiver_thread_entry(queue: &Queue<u32>, finished: &Semaphore) {
     finished.put();
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub static THREAD_FINISHED: SemaphoreContext = Semaphore::context();
 const EXPECTED_THREAD_FINISHES: usize = 6;
 
@@ -57,7 +57,7 @@ const UINT32_PER_BLOCK: usize = 12;
 type MyBlock = [u32; UINT32_PER_BLOCK];
 type MyBlockPtr<'pool> = Block<'pool, MyBlock>;
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub static BLOCK_POOL: BlockPoolContext<MyBlock> = BlockPool::context();
 static MY_BLOCK_BLOCKS: StaticBlocks<MyBlock, 13> = StaticBlocks::new();
 
@@ -99,7 +99,7 @@ fn block_pub_sub(
     finished.put();
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn run_from_c(flags: &EventFlags, antipattern: &Mutex<u32>, other: &Thread) {
     for _ in 0..37 {
         let pattern = flags
@@ -114,9 +114,9 @@ pub extern "C" fn run_from_c(flags: &EventFlags, antipattern: &Mutex<u32>, other
     }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub static FLAG_SIGNAL_THREAD: ThreadContext = Thread::context();
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub static FLAG_RETRIEVAL_THREAD: ThreadContext = Thread::context();
 
 pub fn setup<E: ExitProcess>(_: &AppDefine, exit: E) {

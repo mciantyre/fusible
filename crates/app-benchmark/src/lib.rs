@@ -40,11 +40,11 @@
 use core::{num::NonZeroU32, pin::Pin, sync::atomic::AtomicU32};
 
 use fusible::{
+    AppDefine,
     event_flags::{EventFlags, EventFlagsContext, SetOption},
     queue::{Queue, QueueContext, StaticQueueSlots},
     semaphore::{Semaphore, SemaphoreContext},
     thread::{self, StaticStack, Thread, ThreadContext, ThreadPriority},
-    AppDefine,
 };
 
 /// Initialize your cycle count system.

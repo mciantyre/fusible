@@ -6,7 +6,7 @@
 //! number of blocks computed by ThreadX matches the number of blocks we're
 //! sizing for the pool.
 
-use std::pin::{pin, Pin};
+use std::pin::{Pin, pin};
 
 use fusible::{
     block_pool::{Block, BlockOf, BlockPool, BlockPoolContext, StaticBlocks},

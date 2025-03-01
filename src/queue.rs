@@ -246,7 +246,7 @@ impl<T> Drop for QueueContext<'_, T> {
         // Safety: Created and pinned per GSG-002, or not created per GSG003.
         // Checking lifecycle conditions per GSG-003.
         unsafe {
-            let result = crate::tx_sys::tx_queue_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_queue_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_QUEUE_ERROR,
                 "Attempt to drop resource in the initialization context"

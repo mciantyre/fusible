@@ -12,7 +12,7 @@ use fusible::{
 };
 use std::{
     collections::HashSet,
-    pin::{pin, Pin},
+    pin::{Pin, pin},
     thread::ThreadId,
 };
 

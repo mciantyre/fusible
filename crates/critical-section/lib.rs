@@ -69,8 +69,8 @@ use core::pin::Pin;
 use critical_section::RawRestoreState;
 
 use fusible::{
-    mutex::{Mutex, MutexContext, MutexGuard, MutexOptions},
     WaitOption,
+    mutex::{Mutex, MutexContext, MutexGuard, MutexOptions},
 };
 
 fn global_mutex() -> &'static Mutex<()> {
@@ -101,6 +101,6 @@ unsafe impl critical_section::Impl for FusibleCriticalSection {
     }
 
     unsafe fn release(_: RawRestoreState) {
-        global_mutex().unlock().unwrap();
+        unsafe { global_mutex().unlock().unwrap() };
     }
 }

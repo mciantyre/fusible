@@ -112,9 +112,9 @@ use core::{
 };
 
 use crate::{
+    ControlBlock, WaitOption,
     marker::{InvariantLifetime, NotSend},
     tx_sys::TX_MUTEX,
-    ControlBlock, WaitOption,
 };
 
 error_enum! {
@@ -266,7 +266,7 @@ impl<T> Drop for MutexContext<'_, T> {
         // Safety: Resource created and pinned per GSG-002, or not created per
         // GSG-003. Handling lifecycle checks per GSG-003.
         unsafe {
-            let result = crate::tx_sys::tx_mutex_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_mutex_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_MUTEX_ERROR,
                 "Attempt to drop resource in the initialization context"
@@ -336,7 +336,7 @@ impl<T> Mutex<T> {
         unsafe {
             let ctx = ctx.get_ref();
             let result = crate::tx_sys::tx_mutex_create(
-                ctx.0 .0.get(),
+                ctx.0.0.get(),
                 crate::threadx_string(opts.name),
                 opts.inheritance as _,
             );
@@ -454,7 +454,7 @@ impl<T> Mutex<T> {
         // shared references. Even if those shared references aren't
         // Sync, we hold a lock on the data, so no other thread is
         // accessing this state.
-        unsafe { &*self.1 .0.get() }
+        unsafe { &*self.1.0.get() }
     }
 }
 

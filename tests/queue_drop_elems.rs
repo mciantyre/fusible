@@ -5,7 +5,7 @@
 //! in the queue.
 
 use std::{
-    pin::{pin, Pin},
+    pin::{Pin, pin},
     sync::atomic::{AtomicUsize, Ordering},
 };
 

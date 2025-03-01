@@ -578,7 +578,7 @@ macro_rules! impl_common_context {
         /// To avoid using this check, keep hold of the reference produced during creation.
         #[inline]
         pub fn is_created(self: core::pin::Pin<&Self>) -> bool {
-            self.0 .0.is_created()
+            self.0.0.is_created()
         }
 
         /// Returns the resource if it's created.
@@ -637,7 +637,7 @@ mod pool;
 
 use core::{cell::UnsafeCell, marker::PhantomPinned, mem::MaybeUninit};
 
-pub use app_define::{is_initializing, kernel_enter, AppDefine};
+pub use app_define::{AppDefine, is_initializing, kernel_enter};
 
 pub mod block_pool;
 pub mod byte_pool;

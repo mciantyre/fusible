@@ -6,11 +6,11 @@
 use std::{alloc::Layout, cell::Cell, pin::Pin};
 
 use fusible::{
+    WaitOption,
     byte_pool::{
         self, AlignedBytePoolStorage, BytePool, BytePoolContext, Bytes, StaticBytePoolStorage,
     },
     thread::{StaticStack, Thread, ThreadContext},
-    WaitOption,
 };
 
 fn test_byte_pool(byte_pool: &BytePool) {

@@ -5,7 +5,7 @@
 
 use std::{
     num::NonZero,
-    pin::{pin, Pin},
+    pin::{Pin, pin},
     sync::atomic::{AtomicU32, Ordering},
 };
 

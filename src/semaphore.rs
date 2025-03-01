@@ -167,7 +167,7 @@ impl Drop for SemaphoreContext<'_> {
         // Safety: Resource created and pinned per GSG-002, or not created per
         // GSG-003. Handling lifecycle checks per GSG-003.
         unsafe {
-            let result = crate::tx_sys::tx_semaphore_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_semaphore_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_SEMAPHORE_ERROR,
                 "Attempt to drop resource in the initialization context",
@@ -202,7 +202,7 @@ impl Semaphore {
         unsafe {
             let sema = sema.get_ref();
             let result = crate::tx_sys::tx_semaphore_create(
-                sema.0 .0.get(),
+                sema.0.0.get(),
                 crate::threadx_string(opts.name),
                 opts.initial_count,
             );

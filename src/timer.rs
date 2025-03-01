@@ -91,10 +91,10 @@ use core::{cell::UnsafeCell, ffi::CStr, mem::MaybeUninit, num::NonZero, pin::Pin
 use libthreadx_sys::{TX_TIMER, ULONG};
 
 use crate::{
+    AppDefine, ControlBlock,
     callback_dispatch::{self, CallbackDispatch},
     interrupt_control,
     marker::InvariantLifetime,
-    AppDefine, ControlBlock,
 };
 
 error_enum! {
@@ -234,11 +234,7 @@ impl TimerSchedule {
 impl From<bool> for AutoActivate {
     #[inline]
     fn from(auto: bool) -> Self {
-        if auto {
-            Self::Enable
-        } else {
-            Self::Disable
-        }
+        if auto { Self::Enable } else { Self::Disable }
     }
 }
 
@@ -350,7 +346,7 @@ impl Timer {
 
             interrupt_control::with_disabled(|| {
                 let result = crate::tx_sys::tx_timer_create(
-                    ctx.0 .0.get(),
+                    ctx.0.0.get(),
                     crate::threadx_string(opts.name),
                     Some(dispatch.callback()),
                     dispatch.input(),
@@ -549,7 +545,7 @@ impl<R: TimerRunnable> TimerContext<'_, R> {
     /// with the timer.
     unsafe fn set_runnable(&self, runnable: R) {
         // Safety: pointer is valid for writes.
-        unsafe { self.2 .0.get().write(MaybeUninit::new(runnable)) }
+        unsafe { self.2.0.get().write(MaybeUninit::new(runnable)) }
     }
 
     /// Produce a callback dispatch to the MaybeUninit runnable.
@@ -644,14 +640,14 @@ impl<R> Drop for TimerContext<'_, R> {
         // completing our job of managing OS resources. It's the user's job to handle any
         // panic-on-drop conditions due to their code.
         unsafe {
-            let result = crate::tx_sys::tx_timer_delete(self.0 .0.get());
+            let result = crate::tx_sys::tx_timer_delete(self.0.0.get());
             aborting_assert!(
                 result == crate::tx_sys::TX_SUCCESS || result == crate::tx_sys::TX_TIMER_ERROR,
                 "Attempt to drop resource in the initialization context"
             );
 
             if result == crate::tx_sys::TX_SUCCESS {
-                self.2 .0.get_mut().assume_init_drop();
+                self.2.0.get_mut().assume_init_drop();
             }
         }
     }

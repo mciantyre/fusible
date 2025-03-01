@@ -5,7 +5,7 @@
 
 use core::{alloc::Layout, marker::PhantomData, mem::ManuallyDrop, ptr::NonNull};
 
-use crate::{marker::CovariantLifetime, WaitOption};
+use crate::{WaitOption, marker::CovariantLifetime};
 
 /// A general memory pool.
 ///

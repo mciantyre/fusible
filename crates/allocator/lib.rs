@@ -47,12 +47,12 @@ use core::pin::Pin;
 
 pub use fusible::byte_pool::{BytePoolInfo as AllocatorInfo, CreateError};
 use fusible::{
-    byte_pool::{self, BytePool, BytePoolContext, BytePoolOptions},
     AppDefine, WaitOption,
+    byte_pool::{self, BytePool, BytePoolContext, BytePoolOptions},
 };
 
 #[cfg_attr(all(target_arch = "arm", target_os = "none"), global_allocator)]
-#[no_mangle]
+#[unsafe(no_mangle)]
 static GLOBAL_ALLOCATOR: BytePoolAllocator = BytePoolAllocator {
     byte_pool: BytePool::context(),
 };
@@ -81,12 +81,14 @@ pub unsafe fn initialize<'ad, 'pke>(
 ) -> Result<(), CreateError> {
     let mut opts = BytePoolOptions::default();
     opts.name = Some(c"global-allocator");
-    BytePool::create_unchecked(
-        Pin::static_ref(&GLOBAL_ALLOCATOR.byte_pool),
-        start.cast(),
-        len,
-        &opts,
-    )?;
+    unsafe {
+        BytePool::create_unchecked(
+            Pin::static_ref(&GLOBAL_ALLOCATOR.byte_pool),
+            start.cast(),
+            len,
+            &opts,
+        )?;
+    }
 
     Ok(())
 }

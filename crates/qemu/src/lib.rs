@@ -16,7 +16,7 @@ pub use fusible::*;
 #[doc(hidden)]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn _tx_initialize_low_level() {
-    use cortex_m::{peripheral::scb::SystemHandler, Peripherals};
+    use cortex_m::{Peripherals, peripheral::scb::SystemHandler};
 
     cortex_m::interrupt::disable();
 
