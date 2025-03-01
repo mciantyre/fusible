@@ -9,8 +9,6 @@ use core::{
     sync::atomic::{AtomicBool, Ordering},
 };
 
-use crate::interrupt_control;
-
 /// A handle to the [`kernel_enter`] initialization context.
 ///
 /// When you have access to an `AppDefine` reference, you're
@@ -135,10 +133,6 @@ impl AppDefine<'_, '_> {
 ///
 /// You should only enter the kernel once in your program. The behavior
 /// of multiple entry depends on your port's configuration.
-///
-/// Fusible defends against a reentrant call to `kernel_enter` by
-/// protecting the (global) memory that it allocates. However, it will
-/// not prevent you from making multiple `kernel_enter` calls.
 pub fn kernel_enter<'pke, F>(app_define: F) -> !
 where
     F: for<'ad> FnOnce(&'ad AppDefine<'ad, 'pke>) + 'pke,
@@ -175,12 +169,10 @@ where
     // stack before calling tx_kernel_enter. The app_define_trampoline
     // knows the precise type of the app_define callback.
     unsafe {
-        interrupt_control::with_disabled(|| {
-            APP_DEFINE_CALLBACK.0.get().write(CallbackDispatch::direct(
-                app_define_trampoline::<F>,
-                core::ptr::from_mut::<F>(&mut *app_define).cast::<()>(),
-            ));
-        });
+        APP_DEFINE_CALLBACK.0.get().write(CallbackDispatch::direct(
+            app_define_trampoline::<F>,
+            core::ptr::from_mut::<F>(&mut *app_define).cast::<()>(),
+        ));
     }
 
     extern "C" fn app_define_trampoline<'pke, F>(app_define: *mut ())
