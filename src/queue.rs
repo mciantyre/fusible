@@ -618,7 +618,7 @@ const _: () = const {
     // Requires eight bytes (seven bytes of padding) to maintain alignment.
     // That's two u32s per type.
     #[repr(align(8))]
-    struct NeedsMoreAlignment(u8);
+    struct NeedsMoreAlignment(#[allow(dead_code)] u8);
     assert!(QueueSlot::<[NeedsMoreAlignment; 1]>::message_size() == 2);
     assert!(QueueSlot::<[NeedsMoreAlignment; 2]>::message_size() == 4);
     assert!(QueueSlot::<[NeedsMoreAlignment; 3]>::message_size() == 6);
