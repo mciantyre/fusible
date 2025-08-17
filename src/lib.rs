@@ -979,6 +979,7 @@ impl<T> StaticCell<T> {
     ///
     /// Returns `Some(...)` for the first call, then `None` on
     /// any subsequent call.
+    #[expect(clippy::mut_from_ref)]
     fn take(&'static self) -> Option<&'static mut T> {
         // Safety: The flag replacement happens in a critical section.
         // The flag ensures that there is only one mutable reference
