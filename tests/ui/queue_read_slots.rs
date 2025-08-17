@@ -3,11 +3,15 @@
 
 use fusible::queue::{Queue, QueueSlot};
 
+type MySlot = QueueSlot<[u32; 4]>;
+
+fn use_slot(_: &MySlot) {}
+
 /// Once you create a queue with slots, the pool exclusively
 /// borrows those slots. You can't read from the slots.
 fn main() {
-    let mut slots = [const { QueueSlot::<[u32; 4]>::new() }; 1024];
+    let mut slots = [const { MySlot::new() }; 1024];
     let queue = core::pin::pin!(Queue::context());
     Queue::create(queue.as_ref(), &mut slots, &Default::default()).unwrap();
-    let _ = slots[0];
+    use_slot(&slots[0]);
 }

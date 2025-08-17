@@ -3,11 +3,15 @@
 
 use fusible::block_pool::{BlockOf, BlockPool};
 
+type MyBlock = BlockOf<[u32; 4]>;
+
+fn use_block(_: &MyBlock) {}
+
 /// Once you create a pool with storage, the pool exclusively
 /// borrows that storage. You can't read from the storage.
 fn main() {
-    let mut storage = [const { BlockOf::<[u32; 4]>::new() }; 1024];
+    let mut storage = [const { MyBlock::new() }; 1024];
     let pool = core::pin::pin!(BlockPool::context());
     BlockPool::create(pool.into_ref(), &mut storage, &Default::default()).unwrap();
-    let _ = storage[0];
+    use_block(&storage[0]);
 }

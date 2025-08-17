@@ -1,11 +1,9 @@
-error[E0503]: cannot use `slots` because it was mutably borrowed
-  --> tests/ui/queue_read_slots.rs:12:13
+error[E0502]: cannot borrow `slots[_]` as immutable because it is also borrowed as mutable
+  --> tests/ui/queue_read_slots.rs:16:14
    |
-10 |     let queue = core::pin::pin!(Queue::context());
-   |                 --------------------------------- a temporary with access to the borrow is created here ...
-11 |     Queue::create(queue.as_ref(), &mut slots, &Default::default()).unwrap();
-   |                                   ---------- `slots` is borrowed here
-12 |     let _ = slots[0];
-   |             ^^^^^^^^ use of borrowed `slots`
-13 | }
-   | - ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `QueueContext`
+15 |     Queue::create(queue.as_ref(), &mut slots, &Default::default()).unwrap();
+   |                                   ---------- mutable borrow occurs here
+16 |     use_slot(&slots[0]);
+   |              ^^^^^^^^^ immutable borrow occurs here
+17 | }
+   | - mutable borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `QueueContext`

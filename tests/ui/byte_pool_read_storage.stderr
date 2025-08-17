@@ -1,11 +1,9 @@
-error[E0503]: cannot use `storage` because it was mutably borrowed
-  --> tests/ui/byte_pool_read_storage.rs:12:13
+error[E0502]: cannot borrow `storage` as immutable because it is also borrowed as mutable
+  --> tests/ui/byte_pool_read_storage.rs:14:17
    |
-10 |     let pool = core::pin::pin!(BytePool::context());
-   |                ------------------------------------ a temporary with access to the borrow is created here ...
-11 |     BytePool::create(pool.into_ref(), &mut storage, &Default::default()).unwrap();
-   |                                       ------------ `storage` is borrowed here
-12 |     let _ = storage[0];
-   |             ^^^^^^^^^^ use of borrowed `storage`
-13 | }
-   | - ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+13 |     BytePool::create(pool.into_ref(), &mut storage, &Default::default()).unwrap();
+   |                                       ------------ mutable borrow occurs here
+14 |     use_storage(&storage);
+   |                 ^^^^^^^^ immutable borrow occurs here
+15 | }
+   | - mutable borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `BytePoolContext`
