@@ -1,8 +1,6 @@
 error[E0597]: `slots` does not live long enough
   --> tests/ui/queue_slot_lifetime_too_small.rs:14:35
    |
-12 |     let queue = core::pin::pin!(Queue::context());
-   |                 --------------------------------- a temporary with access to the borrow is created here ...
 13 |     let mut slots = [const { MyElem::new() }; 5];
    |         --------- binding `slots` declared here
 14 |     Queue::create(queue.as_ref(), &mut slots, &Default::default()).unwrap();
@@ -11,13 +9,13 @@ error[E0597]: `slots` does not live long enough
    | -
    | |
    | `slots` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `QueueContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `QueueContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined
 
 error[E0597]: `lower` does not live long enough
   --> tests/ui/queue_slot_lifetime_too_small.rs:28:35
    |
-24 |     let queue = core::pin::pin!(Queue::context());
-   |                 --------------------------------- a temporary with access to the borrow is created here ...
 25 |     let mut lower = [const { MyElem::new() }; 5];
    |         --------- binding `lower` declared here
 ...
@@ -27,13 +25,13 @@ error[E0597]: `lower` does not live long enough
    | -
    | |
    | `lower` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `QueueContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `QueueContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined
 
 error[E0597]: `lower` does not live long enough
   --> tests/ui/queue_slot_lifetime_too_small.rs:41:35
    |
-38 |     let queue = core::pin::pin!(Queue::context());
-   |                 --------------------------------- a temporary with access to the borrow is created here ...
 39 |     let mut lower = [const { MyElem::new() }; 5];
    |         --------- binding `lower` declared here
 40 |
@@ -44,4 +42,6 @@ error[E0597]: `lower` does not live long enough
    | -
    | |
    | `lower` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `QueueContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `QueueContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined

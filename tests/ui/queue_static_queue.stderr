@@ -4,10 +4,8 @@ error[E0597]: `slots` does not live long enough
 10 |     let mut slots = [const { QueueSlot::<String>::new() }; 30];
    |         --------- binding `slots` declared here
 11 |     let queue = core::pin::Pin::static_ref(&QUEUE);
+   |                 ---------------------------------- assignment requires that `slots` is borrowed for `'static`
 12 |     Queue::create(queue.as_ref(), &mut slots, &Default::default()).unwrap();
-   |                                   ^^^^^^^^^^
-   |                                   |
-   |                                   borrowed value does not live long enough
-   |                                   coercion requires that `slots` is borrowed for `'static`
+   |                                   ^^^^^^^^^^ borrowed value does not live long enough
 13 | }
    | - `slots` dropped here while still borrowed

@@ -1,9 +1,6 @@
 error[E0597]: `name` does not live long enough
   --> tests/ui/mutex_option_name.rs:15:22
    |
-11 |     let mutex = pin!(Mutex::context(5u32));
-   |                 -------------------------- a temporary with access to the borrow is created here ...
-12 |
 13 |     let name = CString::new("name").unwrap();
    |         ---- binding `name` declared here
 14 |     let mut opts = MutexOptions::default();
@@ -14,4 +11,6 @@ error[E0597]: `name` does not live long enough
    | -
    | |
    | `name` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `MutexContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `MutexContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined

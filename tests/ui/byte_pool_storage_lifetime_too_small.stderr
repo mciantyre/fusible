@@ -1,8 +1,6 @@
 error[E0597]: `storage` does not live long enough
   --> tests/ui/byte_pool_storage_lifetime_too_small.rs:12:37
    |
-10 |     let pool = core::pin::pin!(BytePool::context());
-   |                ------------------------------------ a temporary with access to the borrow is created here ...
 11 |     let mut storage = [0u8; 1024];
    |         ----------- binding `storage` declared here
 12 |     BytePool::create(pool.as_ref(), &mut storage, &{
@@ -12,13 +10,13 @@ error[E0597]: `storage` does not live long enough
    | -
    | |
    | `storage` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `BytePoolContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined
 
 error[E0597]: `lower` does not live long enough
   --> tests/ui/byte_pool_storage_lifetime_too_small.rs:31:37
    |
-27 |     let pool = core::pin::pin!(BytePool::context());
-   |                ------------------------------------ a temporary with access to the borrow is created here ...
 28 |     let mut lower = [0u8; 512];
    |         --------- binding `lower` declared here
 ...
@@ -28,13 +26,13 @@ error[E0597]: `lower` does not live long enough
    | -
    | |
    | `lower` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `BytePoolContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined
 
 error[E0597]: `lower` does not live long enough
   --> tests/ui/byte_pool_storage_lifetime_too_small.rs:44:37
    |
-41 |     let pool = core::pin::pin!(BytePool::context());
-   |                ------------------------------------ a temporary with access to the borrow is created here ...
 42 |     let mut lower = [0u8; 512];
    |         --------- binding `lower` declared here
 43 |
@@ -45,4 +43,6 @@ error[E0597]: `lower` does not live long enough
    | -
    | |
    | `lower` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `BytePoolContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined

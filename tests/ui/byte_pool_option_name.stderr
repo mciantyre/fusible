@@ -1,9 +1,6 @@
 error[E0597]: `name` does not live long enough
   --> tests/ui/byte_pool_option_name.rs:14:22
    |
-10 |     let pool = pin!(BytePool::context());
-   |                ------------------------- a temporary with access to the borrow is created here ...
-11 |
 12 |     let name = CString::new("name").unwrap();
    |         ---- binding `name` declared here
 13 |     let mut opts = BytePoolOptions::default();
@@ -14,4 +11,6 @@ error[E0597]: `name` does not live long enough
    | -
    | |
    | `name` dropped here while still borrowed
-   | ... and the borrow might be used here, when that temporary is dropped and runs the `Drop` code for type `BytePoolContext`
+   | borrow might be used here, when `pinned` is dropped and runs the `Drop` code for type `BytePoolContext`
+   |
+   = note: values in a scope are dropped in the opposite order they are defined

@@ -9,10 +9,5 @@ error[E0716]: temporary value dropped while borrowed
 16 |     queue.try_receive().unwrap();
    |     ----- borrow later used here
    |
+   = note: consider using a `let` binding to create a longer lived value
    = note: this error originates in the macro `core::pin::pin` (in Nightly builds, run with -Z macro-backtrace for more info)
-help: consider using a `let` binding to create a longer lived value
-   |
-10 ~     let binding = core::pin::pin!(Queue::context());
-11 ~     let queue = Queue::create(
-12 ~         binding.into_ref(),
-   |
