@@ -62,7 +62,7 @@ fn main() {
             STACK.take().unwrap(),
             &Default::default(),
             || loop {
-                let _ = fusible::thread::sleep(20);
+                fusible::thread::sleep(20);
                 if HIDDEN_STATIC.load(Ordering::Relaxed) > 10
                     && GLOBAL_STATIC.load(Ordering::Relaxed) > 10
                 {

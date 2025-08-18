@@ -130,7 +130,7 @@ fn low_prio_thread() {
     let high_prio_thread = Pin::static_ref(&HIGH_PRIO_THREAD).try_created().unwrap();
 
     loop {
-        let _ = thread::sleep(250 * TX_TIMER_TICKS_PER_SECOND / 1000);
+        thread::sleep(250 * TX_TIMER_TICKS_PER_SECOND / 1000);
 
         signal(|| high_prio_thread.resume()).unwrap();
         signal(|| flags.set(0xDEADBEEF, SetOption::Or));

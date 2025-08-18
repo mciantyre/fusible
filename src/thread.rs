@@ -852,13 +852,30 @@ impl SleepResult {
 /// Sleep the currently-executing thread for `ticks` of the timer.
 ///
 /// The resolution of `ticks` depends on your system's configuration.
-#[inline]
-pub fn sleep(ticks: u32) -> Result<(), SleepError> {
+pub fn try_sleep(ticks: u32) -> Result<(), SleepError> {
     // Safety: This is a valid FFI call with no concern for memory safety.
     // Assume that the bindings library is correct.
     let result = unsafe { crate::tx_sys::tx_thread_sleep(ticks) };
     SleepError::try_from_result(result)?;
     Ok(())
+}
+
+/// Sleep the currently-executing thread for `ticks` of the timer.
+///
+/// The resolution of `ticks` depends on your system's configuration.
+///
+/// # Panics
+///
+/// This can only be called from threads. If it's not called from a thread,
+/// it panics.
+///
+/// If your sleep is aborted early, this panics. To catch this possibility,
+/// use [`try_sleep`].
+pub fn sleep(ticks: u32) {
+    assert!(
+        try_sleep(ticks).is_ok(),
+        "thread::sleep() returned an error"
+    );
 }
 
 /// Relinquish control to other application threads.

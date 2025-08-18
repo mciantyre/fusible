@@ -104,7 +104,7 @@
 //!     loop {
 //!         let my_object = pool.allocate(|| MyObject::new()).unwrap();
 //!         assert!(queue.send(my_object).is_ok());
-//!         thread::sleep(10).unwrap();
+//!         thread::sleep(10);
 //! #       queue.try_receive().unwrap();
 //! #       std::process::exit(0);
 //!     }
@@ -177,7 +177,7 @@
 //!     loop {
 //!         let my_object = pool.allocate(|| MyObject::new()).unwrap();
 //!         assert!(queue.send(my_object).is_ok());
-//!         thread::sleep(10).unwrap();
+//!         thread::sleep(10);
 //! #       queue.try_receive().unwrap();
 //! #       std::process::exit(0);
 //!     }
@@ -237,7 +237,7 @@
 //!     loop {
 //!         let my_object = pool.allocate(|| MyObject::new()).unwrap();
 //!         assert!(queue.send(my_object).is_ok());
-//!         thread::sleep(10).unwrap();
+//!         thread::sleep(10);
 //! #       queue.try_receive().unwrap();
 //! #       std::process::exit(0);
 //!     }
